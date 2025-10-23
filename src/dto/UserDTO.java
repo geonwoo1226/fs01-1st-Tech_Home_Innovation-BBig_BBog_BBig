@@ -12,6 +12,8 @@ public class UserDTO {
 	// 유저 외출 상태
 	private String state;
 	
+	private int roomId;
+	
 	// 유저 (아파트) 동
 	private int building;
 	
@@ -23,8 +25,9 @@ public class UserDTO {
 	public UserDTO() {
 		
 	}
-
 	
+	
+
 
 	public UserDTO(String userId, String pass, String phoneNumber, String state, int building, String roomNum) {
 		super();
@@ -35,6 +38,36 @@ public class UserDTO {
 		this.building = building;
 		this.roomNum = roomNum;
 	}
+
+
+
+
+	public UserDTO(String userId, String pass, String phoneNumber, String state, int roomId, int building,
+			String roomNum) {
+		super();
+		this.userId = userId;
+		this.pass = pass;
+		this.phoneNumber = phoneNumber;
+		this.state = state;
+		this.roomId = roomId;
+		this.building = building;
+		this.roomNum = roomNum;
+	}
+
+
+
+	public int getRoomId() {
+		return roomId;
+	}
+
+
+	public void setRoomId(int roomId) {
+		this.roomId = roomId;
+	}
+
+
+
+
 
 
 
@@ -89,8 +122,17 @@ public class UserDTO {
 	@Override
 	public String toString() {
 		return "UserDTO [userId=" + userId + ", pass=" + pass + ", phoneNumber=" + phoneNumber + ", state=" + state
-				+ ", building=" + building + ", roomNum=" + roomNum + "]";
+				+ ", roomId=" + roomId + ", building=" + building + ", roomNum=" + roomNum + "]";
 	}
+
+
+
+
+
+
+
+
+
 
 
 	public String getRoomNum() {
