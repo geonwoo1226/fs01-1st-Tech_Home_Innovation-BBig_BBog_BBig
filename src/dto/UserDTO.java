@@ -25,9 +25,6 @@ public class UserDTO {
 	public UserDTO() {
 		
 	}
-	
-	
-
 
 	public UserDTO(String userId, String pass, String phoneNumber, String state, int building, String roomNum) {
 		super();

@@ -16,7 +16,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO login(String id, String pass) {
-		UserDTO user = new UserDTO();
+		UserDTO user = dao.login(id, pass);
 		System.out.println(user);
 		return user;
 	}

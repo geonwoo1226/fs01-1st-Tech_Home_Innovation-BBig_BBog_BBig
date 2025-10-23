@@ -110,9 +110,11 @@ public class MainController {
 		case "1":
 			SensorControl sensorContorl = new SensorControl();
 			view.showMessage("센서 제어 메뉴입니다.");
+			System.out.println("센서");
 			break;
 		case "2":
-			// myPage();
+			MypageController myPage = new MypageController();
+			myPage.showMyPage();
 			view.showMessage("정보 조회 메뉴입니다.");
 			break;
 		case "3":
@@ -135,10 +137,7 @@ public class MainController {
 			view.showMessage("프로그램을 종료합니다");  // 일단 프로그램 종료로 하고, 이후 이전 페이지로 변동 예정
 			exitProgram();
 			break;
-
-			
 		}
-		
 	}
 	
 	

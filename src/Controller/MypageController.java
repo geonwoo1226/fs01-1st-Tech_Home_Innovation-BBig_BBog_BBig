@@ -1,7 +1,8 @@
 package Controller;
 
-public class SensorControl {
+public class MypageController {
 	public void showMyPage() {
 		
 	}
+
 }
