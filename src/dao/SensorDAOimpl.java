@@ -1,5 +1,5 @@
 package dao;
 
-public class SensorDAOimpl implements SensorDAO {
+public class SensorDAOImpl implements SensorDAO {
 
 }

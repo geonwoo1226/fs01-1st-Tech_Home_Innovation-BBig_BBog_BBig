@@ -1,5 +1,5 @@
 package dao;
 
-public class OrderDAOimpl implements OrderDAO {
+public class OrderDAOImpl implements OrderDAO {
 
 }

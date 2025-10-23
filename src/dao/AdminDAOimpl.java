@@ -1,5 +1,5 @@
 package dao;
 
-public class AdminDAOimpl implements AdminDAO {
+public class AdminDAOImpl implements AdminDAO {
 
 }
