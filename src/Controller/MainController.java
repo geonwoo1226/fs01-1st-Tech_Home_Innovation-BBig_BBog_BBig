@@ -113,8 +113,7 @@ public class MainController {
 			System.out.println("센서");
 			break;
 		case "2":
-			MypageController myPage = new MypageController();
-			myPage.showMyPage();
+			
 			view.showMessage("정보 조회 메뉴입니다.");
 			break;
 		case "3":

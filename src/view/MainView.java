@@ -98,6 +98,18 @@ public class MainView {
 		return scanner.nextLine();
 	}
 	
+	// 로그인 후 사용자 정보 조회
+	public String showUserInfo(UserDTO userDTO) {
+
+		System.out.println("=== 로그인한 사용자 정보 ===");
+	    System.out.println("아이디: " );
+	    System.out.println("비밀번호: ");
+	    System.out.println("전화번호: " );
+	    System.out.println("상태: " );
+	    System.out.println("건물 번호: ");
+	    System.out.println("호실 번호: ");
+	    System.out.println("============================");
+	}
 	
 	public void showMessage(String string) {
 		
