@@ -17,14 +17,13 @@ public class UserDAOImpl implements UserDAO {
 		
 		// 유저가 입력한 (아파트) 동/호실이 존재하는지 체크 후 유저 추가   101 3001 
 		String checkRoom = "select * from room where building = ? and room_num = ?";
-		String insertUser = "insert into user values(?, ?, ?, null)";
-		String updateRoom = "update room set user_id = ? where building = ? and room_num = ?";
+		String insertUser = "insert into user values(?, ?, ?, null, ?)";
 		Connection con = null;
 		ResultSet rs = null;
 		
 		PreparedStatement ptmtCheck = null;
 		PreparedStatement ptmtUser = null;
-		PreparedStatement ptmtRoom = null;
+
 		
 		
 		
@@ -43,25 +42,20 @@ public class UserDAOImpl implements UserDAO {
 			if(!rs.next()) {
 				return -1;
 			}
+			
 			// 아닐 경우 테이블에 데이터 추가 작업
+			// room 테이블에서 유저가 입력한 동/호수와 일치하는 room_id 값을 변수로 저장
+			int room_id = rs.getInt("room_id");
 			
 			// (회원가입) 유저 테이블에 정보 추가
 			ptmtUser = con.prepareStatement(insertUser);
 			ptmtUser.setString(1, user.getUserId());
 			ptmtUser.setString(2, user.getPass());
 			ptmtUser.setString(3, user.getPhoneNumber());
+			ptmtUser.setInt(4, room_id);
 			
 			ptmtUser.executeUpdate(); 
-			
-			// (회원가입) 유저가 입력한 동/ 호실 데이터는 Room 테이블에서 조회 후
-			// Room 테이블에 존재하는 거주지가 맞으면 userid 추가
-			ptmtRoom = con.prepareStatement(updateRoom);
-			ptmtRoom.setString(1, user.getUserId());
-			ptmtRoom.setInt(2, user.getBuilding());
-			ptmtRoom.setString(3, user.getRoomNum());
-			
-			ptmtRoom.executeUpdate();
-			con.commit(); // 트랜잭션 커밋
+			con.commit(); // 트랜잭션 확정
 			
 			result = 1;
 			
@@ -77,7 +71,6 @@ public class UserDAOImpl implements UserDAO {
 	    } finally {
 			DBUtil.close(null, ptmtCheck, con);
 			DBUtil.close(null, ptmtUser, con);
-			DBUtil.close(null, ptmtRoom, con);
 		}
 		
 		return result;
@@ -85,8 +78,37 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public UserDTO login(String id, String pass) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		PreparedStatement ptmt = null;
+		ResultSet rs = null;
+		UserDTO loginSuccesUser = null;
+		
+		String sql = "SELECT u.user_id, u.pass, u.phone_number, u.state, r.building, r.room_num " +
+	             "FROM user u JOIN room r ON u.room_id = r.room_id " +
+	             "WHERE u.user_id = ? AND u.pass = ?";
+		try {
+			con = DBUtil.getConnect();
+			ptmt = con.prepareStatement(sql);
+			ptmt.setString(1, id);
+			ptmt.setString(2, pass);
+			
+			rs = ptmt.executeQuery();
+
+			
+			if(rs.next()) {
+				loginSuccesUser = new UserDTO(rs.getString("user_id"), 
+												rs.getString("pass"),
+												rs.getString("phone_number"),
+												rs.getString("state"),
+												rs.getInt("building"),
+												rs.getString("room_num"));
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs, ptmt, con);
+		}
+		return loginSuccesUser;
 	}
 
 }

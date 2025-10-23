@@ -2,6 +2,7 @@ package Controller;
 
 import javax.swing.JOptionPane;
 
+import dto.LoginUserDTO;
 import dto.UserDTO;
 import dto.UserSessionDTO;
 import mqtt.MqttManager;
@@ -25,7 +26,7 @@ public class MainController {
 				handleInitialMenu();
 			} else {
 				// 로그인된 후의 로직 처리
-//				handleMainMenu();
+				handleMainMenu();
 				System.out.println("로그인");
 			}
 		}
@@ -42,7 +43,7 @@ public class MainController {
 			register();
 			break;
 		case "2":
-//			login();
+			login();
 			break;
 		case "3":
 			mqttManager = new MqttManager("");
@@ -58,7 +59,7 @@ public class MainController {
 			break;
 
 		case "9":
-//			exitProgram();
+			exitProgram();
 			break;
 		default:
 //			view.showMessage("(!) 잘못된 입력입니다.");
@@ -88,3 +89,81 @@ public class MainController {
 	}
 
 }
+	
+	
+	// 로그인
+	private void login() {
+		ConsoleUtils.clearConsole();
+		
+		// 사용자 입력값 가져오기
+		LoginUserDTO loginUser = view.handleLogin();
+		
+		// (id, pass)로 사용자 확인 성공 시 UserDTO 반환
+		UserDTO loginSuccessUser = service.login(loginUser.getUserId(), loginUser.getPass());
+		
+		// 로그인 성공하면 세션에 로그인 사용자 정보를 담고, 
+		// Mqtt Subscriber를 실행함
+		if(loginSuccessUser != null) {
+			// 현재 사용자 정보 저장
+			currentUser = new UserSessionDTO(loginSuccessUser);
+			System.out.println("\n MQTT 서비스에 연결을 시작합니다.");
+//			mqttManager = new MqttManager(currentUser.getLoginUser().getUserId());
+			handleMainMenu();
+		}else {
+			JOptionPane.showMessageDialog(null, "로그인 실패");
+			login();
+		}
+	
+	}
+	
+	// 로그인 성공 시 실행
+	private void handleMainMenu() {
+		ConsoleUtils.clearConsole();
+		// View에 현재 사용자 이름을 넘겨주어 메뉴를 보여주게 함
+		String choice = view.showMainMenu(currentUser.getLoginUser());
+		switch (choice) {
+		case "1":
+			SensorControl sensorContorl = new SensorControl();
+			view.showMessage("센서 제어 메뉴입니다.");
+			break;
+		case "2":
+			// myPage();
+			view.showMessage("정보 조회 메뉴입니다.");
+			break;
+		case "3":
+			// infoUpdate();
+			view.showMessage("사용자 정보 수정 메뉴입니다.");
+			break;
+		case "4":
+			// martUse();
+			view.showMessage("단지 마트 메뉴입니다.");
+			break;
+		case "5":
+			// noticeBoard();
+			view.showMessage("아파트 게시판입니다.");
+			break;
+		case "6":
+			// stateUpdate();
+			view.showMessage("외출 상태 변환 메뉴입니다");
+			break;
+		case "7":
+			view.showMessage("프로그램을 종료합니다");  // 일단 프로그램 종료로 하고, 이후 이전 페이지로 변동 예정
+			exitProgram();
+			break;
+
+			
+		}
+		
+	}
+	
+	
+	
+	// 로그아웃
+	private void exitProgram() {
+		ConsoleUtils.clearConsole();
+		
+		MainView.exitProgram();
+	}
+	
+	
+}	
