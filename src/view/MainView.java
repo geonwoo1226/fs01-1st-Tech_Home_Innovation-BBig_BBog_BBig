@@ -4,6 +4,7 @@ package view;
 
 import java.util.Scanner;
 
+import dto.LoginUserDTO;
 import dto.UserDTO;
 
 public class MainView {
@@ -64,10 +65,49 @@ public class MainView {
 		return newUser;
 	}
 	
+	// 로그인 뷰
+	public LoginUserDTO handleLogin() {
+		System.out.println("\n=========================");
+		System.out.println("              로그인           ");
+		System.out.println("---------------------------");
+		System.out.println("아이디: ");
+		String userId = scanner.nextLine();
+		System.out.println("비밀번호: ");
+		String pass = scanner.nextLine();
+		return new LoginUserDTO(userId, pass);
+		
+	}
 	
-	public static void main(String[] args) {
-
-
+	
+	// 로그인 성공 시 화면
+	public String showMainMenu(UserDTO userDTO) {
+		
+		System.out.println("\n==================================================");
+		System.out.println("      🌿 라즈베리파이 스마트홈 제어 시스템 🌿");
+		System.out.println("==================================================");
+		System.out.printf("%s님, 환영합니다!         현재 상태: 양호 ✅\n\n", userDTO.getUserId());
+		System.out.println("  [1] 센서 관리 💡");
+		System.out.println("  [2] 정보 조회 📊");
+		System.out.println("  [3] 사용자 정보 수정 ⚙️");
+		System.out.println("  [4] 단지 마트");
+		System.out.println("  [5] 아파트 게시판");
+		System.out.println("  [6] 외출 상태 변환");
+		System.out.println("  [7] 프로그램 종료");
+		System.out.println("\n--------------------------------------------------");
+		System.out.print("> 입력: ");
+		return scanner.nextLine();
+	}
+	
+	
+	public void showMessage(String string) {
+		
+	}
+	
+	
+	// 프로그램 종료
+	public static void exitProgram() {
+		System.out.println("프로그램을 종료합니다.");
+		System.exit(0);
 	}
 
 }
