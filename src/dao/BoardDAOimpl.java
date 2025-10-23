@@ -1,5 +1,5 @@
 package dao;
 
-public class BoardDAOimpl implements BoardDAO {
+public class BoardDAOImpl implements BoardDAO {
 
 }

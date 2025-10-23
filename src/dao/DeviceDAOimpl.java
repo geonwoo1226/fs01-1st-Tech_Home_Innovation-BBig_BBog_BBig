@@ -1,5 +1,5 @@
 package dao;
 
-public class DeviceDAOimpl implements DeviceDAO {
+public class DeviceDAOImpl implements DeviceDAO {
 
 }
