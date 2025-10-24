@@ -1,7 +1,12 @@
 package Controller;
 
+import mqtt.MqttManager;
+
 public class SensorControl {
-	public void showMyPage() {
-		
+	private MqttManager mqttManager;
+	
+	public void ledSensor() {
+		mqttManager = new MqttManager("");
+		mqttManager.publish("home/test", "led_off");
 	}
 }

@@ -4,14 +4,14 @@ package view;
 
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 import dto.LoginUserDTO;
 import dto.UserDTO;
 
 public class MainView {
 	private static final Scanner scanner = new Scanner(System.in);
 
-	
-	
 	// 앱 실행 첫 화면
 	public String showInitialMenu() {
 		System.out.println("\n==================================================");
@@ -75,7 +75,6 @@ public class MainView {
 		System.out.println("비밀번호: ");
 		String pass = scanner.nextLine();
 		return new LoginUserDTO(userId, pass);
-		
 	}
 	
 	
@@ -92,24 +91,15 @@ public class MainView {
 		System.out.println("  [4] 단지 마트");
 		System.out.println("  [5] 아파트 게시판");
 		System.out.println("  [6] 외출 상태 변환");
-		System.out.println("  [7] 프로그램 종료");
+		System.out.println("  [7] 로그아웃");
 		System.out.println("\n--------------------------------------------------");
 		System.out.print("> 입력: ");
 		return scanner.nextLine();
 	}
 	
-	// 로그인 후 사용자 정보 조회
-	public String showUserInfo(UserDTO userDTO) {
 
-		System.out.println("=== 로그인한 사용자 정보 ===");
-	    System.out.println("아이디: " );
-	    System.out.println("비밀번호: ");
-	    System.out.println("전화번호: " );
-	    System.out.println("상태: " );
-	    System.out.println("건물 번호: ");
-	    System.out.println("호실 번호: ");
-	    System.out.println("============================");
-	}
+	
+	
 	
 	public void showMessage(String string) {
 		

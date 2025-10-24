@@ -22,7 +22,7 @@ public class MqttManager implements MqttCallback{
 	//MqttManager클래스 안에 
 	//퍼브와 서브를 각가 담당하는 기능함수를 구현할것이다
 	
-	private final String broker = "tcp://192.168.14.168:1883";
+	private final String broker = "tcp://192.168.14.39:1883";
 	private final String pubTopic = "/home/#";
 	private final String subTopic = "/home/#";
 	

@@ -9,13 +9,16 @@ import mqtt.MqttManager;
 import service.UserService;
 import service.UserServiceImpl;
 import util.ConsoleUtils;
+import view.DetailView;
 import view.MainView;
 
 public class MainController {
 	// 현재 로그인한 사용자 정보
 	private UserSessionDTO currentUser = null;
-	// 화면을 담당하는 View 객체
+	// 메인 화면을 담당하는 View 객체
 	private final MainView view = new MainView();
+	// 상세 화면을 담당하는 View 객체
+	private final DetailView detailView = new DetailView();
 	private final UserService service = new UserServiceImpl();
 	private MqttManager mqttManager;
 
@@ -44,18 +47,6 @@ public class MainController {
 			break;
 		case "2":
 			login();
-			break;
-		case "3":
-			mqttManager = new MqttManager("");
-			mqttManager.publish("home/test", "mqtt test");
-			break;
-		case "4":
-			mqttManager = new MqttManager("");
-			mqttManager.publish("home/test", "led_on");
-			break;
-		case "5":
-			mqttManager = new MqttManager("");
-			mqttManager.publish("home/test", "led_off");
 			break;
 
 		case "9":
@@ -88,7 +79,6 @@ public class MainController {
 		}).start(); // 스레드 시작
 	}
 
-}
 	
 	
 	// 로그인
@@ -107,7 +97,7 @@ public class MainController {
 			// 현재 사용자 정보 저장
 			currentUser = new UserSessionDTO(loginSuccessUser);
 			System.out.println("\n MQTT 서비스에 연결을 시작합니다.");
-//			mqttManager = new MqttManager(currentUser.getLoginUser().getUserId());
+			//mqttManager = new MqttManager(currentUser.getLoginUser().getUserId());
 			handleMainMenu();
 		}else {
 			JOptionPane.showMessageDialog(null, "로그인 실패");
@@ -123,13 +113,11 @@ public class MainController {
 		String choice = view.showMainMenu(currentUser.getLoginUser());
 		switch (choice) {
 		case "1":
-			SensorControl sensorContorl = new SensorControl();
-			view.showMessage("센서 제어 메뉴입니다.");
+			handleSensorMenu();
 			System.out.println("센서");
 			break;
 		case "2":
-			
-			view.showMessage("정보 조회 메뉴입니다.");
+			showInfo();
 			break;
 		case "3":
 			// infoUpdate();
@@ -148,13 +136,56 @@ public class MainController {
 			view.showMessage("외출 상태 변환 메뉴입니다");
 			break;
 		case "7":
-			view.showMessage("프로그램을 종료합니다");  // 일단 프로그램 종료로 하고, 이후 이전 페이지로 변동 예정
-			exitProgram();
+			view.showMessage("로그아웃");  
+			login();
 			break;
 		}
 	}
 	
+	private void handleSensorMenu() {
+		// 로그인된 유저 데이터 넘기기
+		UserDTO user = currentUser.getLoginUser();
+		SensorControl sensor = new SensorControl();
+		// 센서 종류 선택
+		detailView.selectSensorType(user);
+
+//		switch(sensorType) {
+//		case "1":
+//			
+//            System.out.println("LED관리");
+//            sensor.ledSensor();
+//            // 서비스 호출 → 센서 제어
+//            break;
+//        case "2":
+//            System.out.println("커튼 관리");
+//            break;
+//        case "3":
+//            System.out.println("화분 관리");
+//            break;
+//        case "4":
+//        	handleMainMenu();
+//        	break;
+//        default:
+//            view.showMessage("잘못된 선택입니다.");
+//            break;
+//            
+//		}
+		
+		
+		
+		
+	}
 	
+	private void showInfo() {
+		if(currentUser == null) {
+	        System.out.println("로그인된 사용자가 없습니다.");
+	        return;
+	    }
+
+	    UserDTO user = currentUser.getLoginUser();
+
+	    detailView.showUserInfo(user);
+	}
 	
 	// 로그아웃
 	private void exitProgram() {

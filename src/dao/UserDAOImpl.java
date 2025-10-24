@@ -83,7 +83,7 @@ public class UserDAOImpl implements UserDAO {
 		ResultSet rs = null;
 		UserDTO loginSuccesUser = null;
 		
-		String sql = "SELECT u.user_id, u.pass, u.phone_number, u.state, r.building, r.room_num " +
+		String sql = "SELECT u.user_id, u.pass, u.phone_number, u.state, u.room_id, r.building, r.room_num " +
 	             "FROM user u JOIN room r ON u.room_id = r.room_id " +
 	             "WHERE u.user_id = ? AND u.pass = ?";
 		try {
@@ -96,12 +96,15 @@ public class UserDAOImpl implements UserDAO {
 
 			
 			if(rs.next()) {
-				loginSuccesUser = new UserDTO(rs.getString(1), 
-												rs.getString(2),
-												rs.getString(3),
-												rs.getString(4),
-												rs.getInt(5),
-												rs.getString(6));
+				loginSuccesUser = new UserDTO(
+					    rs.getString("user_id"),
+					    rs.getString("pass"),
+					    rs.getString("phone_number"),
+					    rs.getString("state"),
+					    rs.getInt("room_id"),
+					    rs.getInt("building"),
+					    rs.getString("room_num")
+					);
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();

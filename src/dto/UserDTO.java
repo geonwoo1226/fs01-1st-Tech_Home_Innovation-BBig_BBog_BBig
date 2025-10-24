@@ -26,18 +26,6 @@ public class UserDTO {
 		
 	}
 
-	public UserDTO(String userId, String pass, String phoneNumber, String state, int building, String roomNum) {
-		super();
-		this.userId = userId;
-		this.pass = pass;
-		this.phoneNumber = phoneNumber;
-		this.state = state;
-		this.building = building;
-		this.roomNum = roomNum;
-	}
-
-
-
 
 	public UserDTO(String userId, String pass, String phoneNumber, String state, int roomId, int building,
 			String roomNum) {
