@@ -21,4 +21,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	@Override
+	public int stateUpdate(UserDTO user, String id) {
+		// DAO 호출 → 반환값은 영향을 받은 행(row) 수
+		int result = dao.stateUpdate(user, id);
+		
+		return result;
+	}
+
 }

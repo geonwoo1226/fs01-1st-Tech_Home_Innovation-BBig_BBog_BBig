@@ -44,15 +44,26 @@ public class DetailView {
 		
 		switch(select) {
 		case "1":
-			System.out.println("");
+			System.out.println("방1  ----> on/ off");
 		}
 		
 	}
 	
-	
-	
-	
-	
+
+	// 6번 상태 변환 시스템
+	public String stateUpdate(UserDTO user) {
+		System.out.println("\n==================================================");
+		System.out.println("      외출 상태 변환 시스템");
+		System.out.println("==================================================");
+		System.out.printf("%s님, 현재 외출/귀가 상태를 선택해주세요         현재 상태: %s		building: %d, roomNum: %s%n", user.getUserId(), user.getState(), user.getBuilding(), user.getRoomNum());
+		System.out.println("  [1] 외출");
+		System.out.println("  [2] 재택");
+
+		System.out.println("\n--------------------------------------------------");
+		System.out.print("> 입력: ");
+		
+		return scanner.nextLine();
+	}
 	
 	
 
