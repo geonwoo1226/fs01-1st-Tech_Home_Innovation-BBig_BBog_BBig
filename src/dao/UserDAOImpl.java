@@ -9,6 +9,43 @@ import dto.UserDTO;
 import util.DBUtil;
 
 public class UserDAOImpl implements UserDAO {
+	
+	// 유저 재택/외출 상태 변환 메소드
+	public int stateUpdate(UserDTO user, String state) {
+		String sql = "update user set state = ? where user_id = ?";
+		
+		Connection con = null;
+		PreparedStatement ptmt = null;
+		int rs = 0;
+		
+		try {
+			con = DBUtil.getConnect();
+			ptmt = con.prepareStatement(sql);
+			
+			ptmt.setString(1, state);
+			ptmt.setString(2, user.getUserId());
+			
+			
+
+			
+			rs = ptmt.executeUpdate();
+			
+			Thread.sleep(1000);
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(null, ptmt, con);
+		}
+		
+		return rs;
+		
+	}
+	
+
 
 	// 회원가입 메소드
 	@Override
@@ -76,6 +113,8 @@ public class UserDAOImpl implements UserDAO {
 		return result;
 	}
 
+	
+	// 로그인 메소드
 	@Override
 	public UserDTO login(String id, String pass) {
 		Connection con = null;
@@ -113,5 +152,8 @@ public class UserDAOImpl implements UserDAO {
 		}
 		return loginSuccesUser;
 	}
+
+
+
 
 }

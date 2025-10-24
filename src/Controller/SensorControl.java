@@ -5,8 +5,12 @@ import mqtt.MqttManager;
 public class SensorControl {
 	private MqttManager mqttManager;
 	
-	public void ledSensor() {
-		mqttManager = new MqttManager("");
-		mqttManager.publish("home/test", "led_off");
-	}
+//	public void ledSensor(2) {
+//		if 1:
+//		mqttManager = new MqttManager("");
+//		mqttManager.publish("home/test", "led_off");
+//		
+//		2:
+//			led 
+//	}
 }

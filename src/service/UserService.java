@@ -7,4 +7,7 @@ public interface UserService {
 	int register(UserDTO user);
 	// 로그인 기능으로 id와 pass를 받음
 	UserDTO login(String id, String pass);
+	// 유저의 상태 정보 변환을 위해 user의 id와 state 받음
+	int stateUpdate(UserDTO user, String id);
+	
 }

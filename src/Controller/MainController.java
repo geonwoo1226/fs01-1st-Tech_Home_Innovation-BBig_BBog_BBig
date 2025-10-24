@@ -2,6 +2,8 @@ package Controller;
 
 import javax.swing.JOptionPane;
 
+import dao.UserDAO;
+import dao.UserDAOImpl;
 import dto.LoginUserDTO;
 import dto.UserDTO;
 import dto.UserSessionDTO;
@@ -132,7 +134,7 @@ public class MainController {
 			view.showMessage("아파트 게시판입니다.");
 			break;
 		case "6":
-			// stateUpdate();
+			handleStateUpdate();
 			view.showMessage("외출 상태 변환 메뉴입니다");
 			break;
 		case "7":
@@ -141,6 +143,33 @@ public class MainController {
 			break;
 		}
 	}
+	
+	private void handleStateUpdate() {
+	    UserDAO dao = new UserDAOImpl();
+	    UserDTO user = currentUser.getLoginUser();
+
+	    String choice = detailView.stateUpdate(user);
+	    String newState = null;
+
+	    if ("1".equals(choice)) {
+	        newState = "외출";
+	    } else if ("2".equals(choice)) {
+	        newState = "재택";
+	    } else {
+	        System.out.println("잘못된 값을 입력했습니다.");
+	        return;
+	    }
+
+	    // 1) DB 반영
+	    dao.stateUpdate(user, newState);
+
+	    // 2) DTO에도 반영
+	    user.setState(newState);
+
+	    System.out.println("현재 상태: " + user.getState());
+	}
+	
+	
 	
 	private void handleSensorMenu() {
 		// 로그인된 유저 데이터 넘기기

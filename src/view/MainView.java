@@ -84,7 +84,7 @@ public class MainView {
 		System.out.println("\n==================================================");
 		System.out.println("      🌿 라즈베리파이 스마트홈 제어 시스템 🌿");
 		System.out.println("==================================================");
-		System.out.printf("%s님, 환영합니다!         현재 상태: 양호 ✅\n\n", userDTO.getUserId());
+		System.out.printf("%s님, 환영합니다!         현재 상태: %s 중입니다. \n", userDTO.getUserId(), userDTO.getState());
 		System.out.println("  [1] 센서 관리 💡");
 		System.out.println("  [2] 정보 조회 📊");
 		System.out.println("  [3] 사용자 정보 수정 ⚙️");
@@ -97,7 +97,6 @@ public class MainView {
 		return scanner.nextLine();
 	}
 	
-
 	
 	
 	

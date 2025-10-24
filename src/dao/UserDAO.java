@@ -10,6 +10,7 @@ public interface UserDAO {
 	// 로그인
 	UserDTO login(String id, String pass);
 	
-	// 정보조회
-//	int showInfo();
+	
+	// 재택/외출 상태 변환
+	int stateUpdate(UserDTO user, String state);
 }
