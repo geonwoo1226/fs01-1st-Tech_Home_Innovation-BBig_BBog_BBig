@@ -16,19 +16,42 @@ public class SensorControl {
 //	
 //	2:
 //		led 
+	// 현재 로그인한 사용자 정보
+	private UserDTO currentUser = null;
+	
+	//로그인해야함
+	// 로그인된 사용자 정보
+	UserDTO session = new UserDTO();
 	
 	//모스키토주소
 	private final String broker = "tcp://192.168.14.168:1883";
-	//서브토픽
+	//서브토픽 모음
+	
+	//토픽1
 	private final String subTopic = "/home/#";
+	//토픽2
+	private final String topic = "raspberry/sensor/temp/1";
 //}
-  	private UserDTO currentUser = new UserDTO();
+
 	
   	//sub만 하기
 	private WarningService warningService = new WarningServiceImpl(currentUser);
+	
+	WarningServiceImpl service = new WarningServiceImpl(session);
+
+
 
 	//pub만 하기
 	private SensorService sensorService = new SensorServiceImpl();
+	
+	
+	
+	
+    // 콘솔 출력만
+    // service.subscribeAndDisplaySensorData(broker, topic);
+
+    // DB 저장용
+    //service.subscribeAndSaveSensorData(broker, topic);
 	
 //    public void onUserClickToggleLed(UserSessionDTO session, SensorDTO sensor) {
 //        if (!sensorService.hasControlPermission(session, sensor.getSensorId())) {

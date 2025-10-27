@@ -42,12 +42,3 @@ public class WarningDTO {
     public void setUserId(String userId) { this.userId = userId; }
 }
 
-	
-	
-	
-	
-	
-	
-	
-
-}
