@@ -229,6 +229,7 @@ public class MainController {
 
 		NoticeService noticeService = new NoticeServiceImpl();
 		List<NoticeDTO> noticeList = noticeService.getAllPosts();
+		List<NoticeDTO> myPostlist = noticeService.getPostById(user.getUserId());
 		
 		int choice = detailView.noticeMenu(user);
 		
@@ -243,7 +244,7 @@ public class MainController {
 			noticeBoard();
 			break;
 		case 3:
-			detailView.viewPostDetail(user);    // 자신이 작성한 게시글 조회
+			detailView.viewPostDetail(myPostlist, user);    // 자신이 작성한 게시글 조회
 			noticeBoard();
 			break;
 		case 4:

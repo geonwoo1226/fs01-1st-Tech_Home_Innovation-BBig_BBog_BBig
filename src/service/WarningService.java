@@ -116,4 +116,10 @@ public interface WarningService {
 
 	//sub받아서 db에저장
 	void subscribeAndSaveSensorData(String brokerUrl, String topic);
+
+
+	void subscribeAndDisplaySensorData(String brokerUrl, String topic, UserDTO user);
+
+
+	void subscribeAndSaveSensorData(String brokerUrl, String topic, UserDTO user);
 }

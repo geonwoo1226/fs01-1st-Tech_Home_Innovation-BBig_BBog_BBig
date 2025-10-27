@@ -74,7 +74,7 @@ public class NoticeDAOImpl implements NoticeDAO {
 	}
 
 	@Override
-	public List<NoticeDTO> getPostById(int id) {
+	public List<NoticeDTO> getPostById(String id) {
 		String sql = "select * from notice where user_id = ?";
 		Connection con = null;
 		PreparedStatement ptmt = null;

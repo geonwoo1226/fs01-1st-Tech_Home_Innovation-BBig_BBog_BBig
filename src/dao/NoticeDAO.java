@@ -13,7 +13,7 @@ public interface NoticeDAO {
 	List<NoticeDTO> getAllPosts();
 
 	// 게시글 상세 조회
-	List<NoticeDTO> getPostById(int id);
+	List<NoticeDTO> getPostById(String id);
 
 
 
