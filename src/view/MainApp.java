@@ -3,6 +3,9 @@ package view;
 import javax.swing.JFrame;
 
 import Controller.MainController;
+import dao.UserDAOImpl;
+import service.AdminService;
+import service.AdminServiceImpl;
 
 public class MainApp {
 	public static void main(String[] args) {
@@ -15,10 +18,10 @@ public class MainApp {
         frame.dispose();          // 메모리에서 완전히 제거
         
         
-        
-		MainController mainController = new MainController();
+        AdminService adminService = new AdminServiceImpl(new UserDAOImpl());
+        MainController controller = new MainController(adminService);
 
-	    mainController.run(); // 컨트롤러 실행	
+        controller.run(); // 컨트롤러 실행	
 	  
 	}
 

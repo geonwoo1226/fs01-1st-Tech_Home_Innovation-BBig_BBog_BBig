@@ -1,7 +1,5 @@
 package view;
 
-
-
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -26,45 +24,57 @@ public class MainView {
 
 		return scanner.nextLine();
 	}
-	
+
 	// 회원가입 정보를 입력받아 DTO 객체로 반환하는 메소드
 	public UserDTO showRegistrationForm() {
 		System.out.println("\n=========================");
 		System.out.println("              회원가입           ");
 		System.out.println("---------------------------");
 		UserDTO newUser = new UserDTO();
-		
+
 		System.out.println("아이디: ");
 		newUser.setUserId(scanner.next());
-		
+
+		System.out.println("이름: ");
+		newUser.setName(scanner.next());
+
 		while (true) {
 			System.out.println("비밀번호: ");
 			String password = scanner.next();
 			System.out.println("비밀번호 확인");
 			String passwordConfirm = scanner.next();
-			
-			if(password.equals(passwordConfirm)) {
+
+			if (password.equals(passwordConfirm)) {
 				newUser.setPass(passwordConfirm);
 				break;
 			} else {
-				System.out.println("\n 비밀번호가 일치하지 않습니다.");
+				JOptionPane.showMessageDialog(null, "비밀번호가 일치하지 않습니다.");
 			}
 		}
-		
 
 		System.out.println("핸드폰 번호: ");
-		newUser.setPhoneNumber(scanner.next());
-		
+
+		String newPhoneNum = scanner.next();
+		// 숫자만 남기기 (혹시 - 넣은 경우 대비)
+		newPhoneNum = newPhoneNum.replaceAll("[^0-9]", "");
+		// 길이에 따라 하이픈 자동 삽입
+		if (newPhoneNum.length() == 11) {
+			newPhoneNum = newPhoneNum.substring(0, 3) + "-" + newPhoneNum.substring(3, 7) + "-"
+					+ newPhoneNum.substring(7);
+		}
+
+		newUser.setPhoneNumber(newPhoneNum);
+
 		System.out.println("(아파트) 동: ");
 		newUser.setBuilding(scanner.nextInt());
 		System.out.println("(아파트) 호실: ");
 		newUser.setRoomNum(scanner.next());
-		
+
 		System.out.println("-----------------");
-		
+
 		return newUser;
 	}
-	
+
 	// 로그인 뷰
 	public LoginUserDTO handleLogin() {
 		System.out.println("\n=========================");
@@ -76,11 +86,10 @@ public class MainView {
 		String pass = scanner.nextLine();
 		return new LoginUserDTO(userId, pass);
 	}
-	
-	
+
 	// 로그인 성공 시 화면
 	public String showMainMenu(UserDTO userDTO) {
-		
+
 		System.out.println("\n==================================================");
 		System.out.println("      🌿 라즈베리파이 스마트홈 제어 시스템 🌿");
 		System.out.println("==================================================");
@@ -96,15 +105,27 @@ public class MainView {
 		System.out.print("> 입력: ");
 		return scanner.nextLine();
 	}
-	
-	
-	
-	
-	public void showMessage(String string) {
-		
+
+	// 관리자 로그인 시 화면
+	public String adminMainMenu(UserDTO userDTO) {
+
+		System.out.println("\n==================================================");
+		System.out.println("      🌿 라즈베리파이 스마트홈 제어 시스템 🌿");
+		System.out.println("==================================================");
+		System.out.printf("%s님, 환영합니다!         현재 상태: %s 중입니다. \n", userDTO.getUserId(), userDTO.getState());
+		System.out.println("  [1] 사용자 정보 조회 📊");
+		System.out.println("  [5] 아파트 게시판");
+		System.out.println("  [6] 외출 상태 변환");
+		System.out.println("  [7] 로그아웃");
+		System.out.println("\n--------------------------------------------------");
+		System.out.print("> 입력: ");
+		return scanner.nextLine();
 	}
-	
-	
+
+	public void showMessage(String string) {
+
+	}
+
 	// 프로그램 종료
 	public static void exitProgram() {
 		System.out.println("프로그램을 종료합니다.");

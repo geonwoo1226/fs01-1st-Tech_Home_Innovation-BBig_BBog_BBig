@@ -29,4 +29,13 @@ public class UserServiceImpl implements UserService {
 		return result;
 	}
 
+	// 유저 정보 수정
+	@Override
+	public int updateUserInfo(UserDTO user, UserDTO updatedUser) {
+		
+		int result = dao.userInfoUpdate(user, updatedUser);
+		
+		return result;
+	}
+
 }
