@@ -17,9 +17,9 @@ public class WarningServiceImpl implements WarningService {
 
     private WarningDAO warningDAO = new WarningDAOImpl();
     private IMqttClient mqttClient;
-    private UserSessionDTO currentUser;
+    private UserDTO currentUser;
 
-    public WarningServiceImpl(UserSessionDTO currentUser) {
+    public WarningServiceImpl(UserDTO currentUser) {
         this.currentUser = currentUser;
     }
 
