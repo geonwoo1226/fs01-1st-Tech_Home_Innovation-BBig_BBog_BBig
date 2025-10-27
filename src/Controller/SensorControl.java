@@ -1,9 +1,8 @@
 package Controller;
 
+import dto.UserDTO;
 import dto.UserSessionDTO;
-
-
-
+import mqtt.MqttManager;
 import service.SensorService;
 import service.WarningService;
 import service.SensorServiceImpl;
@@ -23,7 +22,7 @@ public class SensorControl {
 	//서브토픽
 	private final String subTopic = "/home/#";
 //}
-  	private UserSessionDTO currentUser = new UserSessionDTO();
+  	private UserDTO currentUser = new UserDTO();
 	
   	//sub만 하기
 	private WarningService warningService = new WarningServiceImpl(currentUser);
@@ -48,7 +47,7 @@ public class SensorControl {
 //	void subscribeAndSaveSensorData(String brokerUrl, String topic);
     
 
-    public void handleSensorControl(String sensorId, String message, UserSessionDTO session) {
+    public void handleSensorControl(String sensorId, String message, UserDTO session) {
         String userId = session.getUserId();
         
      // 토픽 구성 (예: "sensor/livingroom/led1")
@@ -60,13 +59,11 @@ public class SensorControl {
 //            return;
 //        }
 
-        //라즈베리 센서테이버 받기
-        warningService.subscribeAndDisplaySensorData(broker, subTopic);
-        
-        warningService.subscribeAndSaveSensorData(broker, subTopic);
+       
 
         //라즈베리로 제어 명령 전송
-        sensorService.controlDevice(subTopic, message);
+        //sensorService.controlDevice(subTopic, message)
+    }
     
 	private MqttManager mqttManager;
 
@@ -95,6 +92,11 @@ public class SensorControl {
 		// lcd 출력 메시지 전송
 		mqttManager.publish("home/lcd" , message + "/기능을 수행합니다.");
 		
+		
+		 //라즈베리 센서 데이터받는코드
+        warningService.subscribeAndDisplaySensorData(broker, subTopic);
+        
+        warningService.subscribeAndSaveSensorData(broker, subTopic);
 		
 	}
 
