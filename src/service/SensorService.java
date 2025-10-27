@@ -4,6 +4,10 @@ package service;
 
 import dto.SensorDTO;
 import dto.UserSessionDTO;
+import java.util.ArrayList;
+import java.util.List;
+
+import view.DetailView;
 
 public interface SensorService {
 	
@@ -70,5 +74,7 @@ public interface SensorService {
     String buildTopic(SensorDTO sensorDTO);
 	
 	
+	// 방 번호를 받으면 센서 목록 반환
+	List<String> getSensorByRoom(String roomName);
 
 }

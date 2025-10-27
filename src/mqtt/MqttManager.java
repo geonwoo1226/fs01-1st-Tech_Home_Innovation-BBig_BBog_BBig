@@ -25,7 +25,7 @@ public class MqttManager implements MqttCallback{
 	//퍼브와 서브를 각가 담당하는 기능함수를 구현할것이다
 	
 	private final String broker = "tcp://192.168.14.39:1883";
-	private final String pubTopic = "/home/#";
+	private final String pubTopic = "/home/";
 	private final String subTopic = "/home/#";
 	
 	
@@ -63,6 +63,7 @@ public class MqttManager implements MqttCallback{
 
 	
 	
+	
 	/*MQTT 통신에서 클라이언트 ID는 브로커가 클라이언트를 식별하고 관리하는 데 사용됩니다. 이는 각 클라이언트가 시스템에 고유하게 등록되어 다른 클라이언트와 구분될 수 있도록 하는 중요한 식별자이며, 주로 인증, 권한 부여, 그리고 세션 관리와 같은 여러 작업에 활용됩니다. 
 	클라이언트 ID의 주요 용도
 	식별 및 관리: 클라이언트 ID는 각 MQTT 클라이언트가 브로커에게 자신을 고유하게 식별하는 데 사용됩니다. 브로커는 이 ID를 통해 클라이언트의 연결을 추적하고 관리할 수 있습니다. 
@@ -78,6 +79,16 @@ public class MqttManager implements MqttCallback{
 	private WarningService warningService = new WarningServiceImpl();
 
 	
+	
+	
+	public String getPubTopic() {
+		return pubTopic;
+	}
+
+	public String getSubTopic() {
+		return subTopic;
+	}
+
 	public MqttManager() {
 		// TODO Auto-generated constructor stub
 	}
@@ -137,17 +148,11 @@ public class MqttManager implements MqttCallback{
             me.printStackTrace();
         }
 		
+		
+		
+		
 	}
 	
-	
-	
-	
-
-
-
-
-
-
 	// 브로커&서버로 구독요청을 보내어 들어오는 일방통행 길 개척 함수 / 마법카드
 	private void subscribe() {
 		// TODO Auto-generated method stub
