@@ -128,6 +128,8 @@ public class DetailView {
 		// 팝업으로 출력
 		JOptionPane.showMessageDialog(null, message, "내 정보", JOptionPane.INFORMATION_MESSAGE);
 	}
+	
+
 
 	// 3번 사용자 정보 수정
 	public UserDTO userInfoUpdate(UserDTO user) {
@@ -252,30 +254,30 @@ public class DetailView {
 		
 	}
 	
-	public void viewPostDetail(UserDTO user) {
-		scanner.nextLine(); 
-		System.out.println("\n==================================================");
-		System.out.println("      아파트 소통 게시판");
-		System.out.println("==================================================");
-		System.out.println("번호\t | 카테고리 | 제목 \t \t| 내용 \t \t| 작성날짜 \t |");
-		System.out.println("-------------------------------------------------------------------------------");
-		int size = noticeList.size();
-		
-		for(int i=0; i < size; i++) {
-			NoticeDTO notice = noticeList.get(i);
-			System.out.print(notice.getNoticeId()+ "\t | ");
-			System.out.print("["+notice.getTitle()+"]"+ "\t | ");
-			System.out.print(notice.getType()+ "\t | ");
-
-			System.out.print(notice.getPost()+ "\t | ");
-			System.out.print(notice.getPostDate()+ "\t | ");
-			System.out.println("\n------------------------------------------------------------------------");
-		}
-		System.out.println("==============================================================================");
-		System.out.print("게시판 나가기 >>>>");
-		scanner.nextLine();
-		
-	}
+//	public void viewPostDetail(UserDTO user) {
+//		scanner.nextLine(); 
+//		System.out.println("\n==================================================");
+//		System.out.println("      아파트 소통 게시판");
+//		System.out.println("==================================================");
+//		System.out.println("번호\t | 카테고리 | 제목 \t \t| 내용 \t \t| 작성날짜 \t |");
+//		System.out.println("-------------------------------------------------------------------------------");
+//		int size = noticeList.size();
+//		
+//		for(int i=0; i < size; i++) {
+//			NoticeDTO notice = noticeList.get(i);
+//			System.out.print(notice.getNoticeId()+ "\t | ");
+//			System.out.print("["+notice.getTitle()+"]"+ "\t | ");
+//			System.out.print(notice.getType()+ "\t | ");
+//
+//			System.out.print(notice.getPost()+ "\t | ");
+//			System.out.print(notice.getPostDate()+ "\t | ");
+//			System.out.println("\n------------------------------------------------------------------------");
+//		}
+//		System.out.println("==============================================================================");
+//		System.out.print("게시판 나가기 >>>>");
+//		scanner.nextLine();
+//		
+//	}
 
 	// 6번 상태 변환 시스템
 	public String stateUpdate(UserDTO user) {

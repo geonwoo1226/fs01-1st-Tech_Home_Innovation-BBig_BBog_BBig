@@ -74,7 +74,7 @@ public class NoticeDAOImpl implements NoticeDAO {
 	}
 
 	@Override
-	public List<NoticeDTO> getPostById(int id) {
+	public List<NoticeDTO> getPostById(String id) {
 		String sql = "select * from notice where user_id = ?";
 		Connection con = null;
 		PreparedStatement ptmt = null;
@@ -95,13 +95,14 @@ public class NoticeDAOImpl implements NoticeDAO {
 										rs.getString(4),
 										rs.getString(5),
 										rs.getString(6));
+				}
 				myPostlist.add(noticeMy);
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}finally {
 				DBUtil.close(rs, ptmt, con);
 			}
-		}
+		
 		
 		return myPostlist;
 	}

@@ -124,6 +124,21 @@ public class MainController {
 			currentUser = new UserSessionDTO(loginSuccessUser);
 			System.out.println("\n MQTT 서비스에 연결을 시작합니다.");
 			// mqttManager = new MqttManager(currentUser.getLoginUser().getUserId());
+			
+			
+			// 1️ UserDTO 생성
+	        UserDTO user = new UserDTO();
+	        user.setUserId("user123"); // 예시 ID
+
+	        // 2️ MqttManager 생성 (구독 시작)
+	        MqttManager mqttManager = new MqttManager(user);
+
+	        // 3️ 발행 테스트
+	        String publishTopic = "/home/pc/livingroom/light";
+	        String message = "Light ON";
+
+	        mqttManager.publish(publishTopic, message);
+			
 			// 만약 로그인한 user_id가 admin일 경우
 			if ("admin".equals(loginSuccessUser.getUserId())) {
 				JOptionPane.showMessageDialog(null, "관리자로 로그인했습니다.");
@@ -166,6 +181,9 @@ public class MainController {
 			case "7":
 				view.showMessage("로그아웃");
 				currentUser = null;
+
+		        // 5️ 연결 종료
+		        mqttManager.close();
 				JOptionPane.showMessageDialog(null, "로그아웃 됐습니다.");
 				run();
 				break;
@@ -181,6 +199,8 @@ public class MainController {
 
 		adminView.showResidentList(residents);
 	}
+	
+	
 
 	// 로그인 성공 시 실행
 	private void handleMainMenu() {
@@ -243,7 +263,7 @@ public class MainController {
 			noticeBoard();
 			break;
 		case 3:
-			detailView.viewPostDetail(user);    // 자신이 작성한 게시글 조회
+	//		detailView.viewPostDetail(user);    // 자신이 작성한 게시글 조회
 			noticeBoard();
 			break;
 		case 4:

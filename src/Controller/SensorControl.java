@@ -1,5 +1,8 @@
 package Controller;
 
+import mqtt.MqttManager;
+
+public class SensorControl {
 import dto.UserDTO;
 import dto.UserSessionDTO;
 import mqtt.MqttManager;
