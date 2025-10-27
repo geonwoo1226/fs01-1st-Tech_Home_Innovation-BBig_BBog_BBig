@@ -95,13 +95,14 @@ public class NoticeDAOImpl implements NoticeDAO {
 										rs.getString(4),
 										rs.getString(5),
 										rs.getString(6));
+				}
 				myPostlist.add(noticeMy);
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}finally {
 				DBUtil.close(rs, ptmt, con);
 			}
-		}
+		
 		
 		return myPostlist;
 	}

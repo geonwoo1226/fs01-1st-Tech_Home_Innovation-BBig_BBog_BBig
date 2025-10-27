@@ -32,9 +32,9 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public NoticeDTO getPostById(int id) {
+	public List<NoticeDTO> getPostById(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		return noticeDAO.getPostById(id);
 	}
 
 }
