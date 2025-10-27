@@ -10,6 +10,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
 
+import dto.UserDTO;
+import dto.UserSessionDTO;
 import service.SensorService;
 import service.SensorServiceImpl;
 import service.WarningService;
@@ -26,8 +28,39 @@ public class MqttManager implements MqttCallback{
 	private final String pubTopic = "/home/#";
 	private final String subTopic = "/home/#";
 	
+	
+	
+	
 	//서버(브로커)와의 연결을 담당하는 통신병 객체 =client
 	private MqttClient client;
+	
+	
+    //의문4 로그인을 한 userdto를 내가 신경안썼네? 로그인여부에 따라 센서보내지는 정도가 왔다갔다하는데?
+    //현재 로그인한 사용자 정보
+	// UserSessionDTO 객체가 이미 생성되어 있다고 가정합니다.
+	// 예: UserSessionDTO sessionData = new UserSessionDTO(loginUser);
+	UserSessionDTO sessionData;
+
+	// (예시를 위한 설정)
+	// 로그인한 사용자 정보가 담긴 UserDTO 객체를 먼저 생성합니다.
+	UserDTO loginUser = new UserDTO();
+	
+	//loginUser.setUserId("user123");
+
+	// UserSessionDTO에 로그인 사용자 정보를 저장합니다
+	sessionData = new UserSessionDTO(loginUser);
+
+	// UserSessionDTO에서 userId를 가져오는 과정
+	// 1. getLoginUser() 메서드로 UserDTO 객체를 가져옵니다.
+	UserDTO logindUser = sessionData.getLoginUser();
+
+	// 2. 가져온 UserDTO 객체에서 getUserId() 메서드로 아이디를 가져옵니다.
+	String userId = logindUser.getUserId();
+
+	// 결과를 출력합니다.
+	
+	//System.out.println("사용자 아이디: " + userId);
+
 	
 	
 	/*MQTT 통신에서 클라이언트 ID는 브로커가 클라이언트를 식별하고 관리하는 데 사용됩니다. 이는 각 클라이언트가 시스템에 고유하게 등록되어 다른 클라이언트와 구분될 수 있도록 하는 중요한 식별자이며, 주로 인증, 권한 부여, 그리고 세션 관리와 같은 여러 작업에 활용됩니다. 
@@ -76,7 +109,10 @@ public class MqttManager implements MqttCallback{
 			 * 
 			 * 
 			 * */
-	        String javaClientId = "combined_client_" + UUID.randomUUID().toString();
+	        
+			//String javaClientId = "combined_client_" + UUID.randomUUID().toString();
+			 String javaClientId = currentUser. + UUID.randomUUID().toString();
+	        
 	        client = new MqttClient(broker, javaClientId);
 	        
             // 연결 설정을 힙메모리에 할당하기
