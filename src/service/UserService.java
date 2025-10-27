@@ -10,4 +10,7 @@ public interface UserService {
 	// 유저의 상태 정보 변환을 위해 user의 id와 state 받음
 	int stateUpdate(UserDTO user, String id);
 	
+	// 유저 정보 수정을 위해 받음 기존 user의 id와 새로운 user 정보를 받음
+	int updateUserInfo(UserDTO user, UserDTO updatedUser);
+	
 }

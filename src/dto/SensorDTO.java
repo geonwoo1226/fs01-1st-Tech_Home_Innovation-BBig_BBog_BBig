@@ -3,9 +3,9 @@ package dto;
 public class SensorDTO {
 	
 	private String sensorId;
-	private String sensorType;
-	private String sensorLocation;
-	private String sensorPower;
+	private String sensorType;    // LED, Servo 등 타입
+	private String sensorLocation;  // 방 이름
+	private String sensorPower;     // on/off
 	
 	public SensorDTO() {
 		
