@@ -7,8 +7,6 @@ import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import dao.UserDAO;
-import dao.UserDAOImpl;
 import dao.WarningDAO;
 import dao.WarningDAOImpl;
 import dto.UserDTO;
@@ -19,20 +17,22 @@ public class WarningServiceImpl implements WarningService {
 
     private WarningDAO warningDAO = new WarningDAOImpl();
     private IMqttClient mqttClient;
-    private UserSessionDTO currentUser;
-    private final UserDAO dao = new UserDAOImpl();
+    private UserDTO currentUser;
+    
+    public WarningServiceImpl() {
+    	
+    }
 
-    public WarningServiceImpl(UserSessionDTO currentUser) {
+    public WarningServiceImpl(UserDTO currentUser) {
         this.currentUser = currentUser;
     }
-	
 
     // ✅ 구현 함수 1: 로그인 유저 기반 MQTT 구독 → 콘솔 출력
     @Override
-    public void subscribeAndDisplaySensorData(String brokerUrl, String topic, UserDTO user) {
+    public void subscribeAndDisplaySensorData(String brokerUrl, String topic) {
         try {
             // 로그인된 사용자 기준으로 클라이언트 ID 생성
-            String clientId = user.getUserId();
+            String clientId = currentUser.getUserId();
 
             mqttClient = new MqttClient(brokerUrl, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
@@ -54,9 +54,9 @@ public class WarningServiceImpl implements WarningService {
 
     // ✅ 구현 함수 2: 로그인 유저 기반 MQTT 구독 → DB 저장
     @Override
-    public void subscribeAndSaveSensorData(String brokerUrl, String topic, UserDTO user) {
+    public void subscribeAndSaveSensorData(String brokerUrl, String topic) {
         try {
-            String clientId = user.getUserId();
+            String clientId = currentUser.getUserId();
 
             mqttClient = new MqttClient(brokerUrl, clientId);
             MqttConnectOptions options = new MqttConnectOptions();
@@ -100,6 +100,7 @@ public class WarningServiceImpl implements WarningService {
             warning.setSensorId(sensorId);
             warning.setMessage(message);
             warning.setWarningDate(new java.sql.Timestamp(System.currentTimeMillis()));
+            warning.setUserId(currentUser != null ? currentUser.getUserId() : "system");
 
             warningDAO.insertWarning(warning);
             System.out.println("✅ Warning 데이터 저장 완료: " + warning.toString());
