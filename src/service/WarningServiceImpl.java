@@ -12,75 +12,37 @@ import dto.WarningDTO;
 import service.WarningService;
 import util.DBUtil;
 
+import dao.WarningDAO;
+import dao.WarningDAOImpl;
+
+import dto.UserDTO;
+import dto.WarningDTO;
+
 public class WarningServiceImpl implements WarningService {
 
     private UserDTO userDTO;
     private String id;
+    
+    private WarningDAO dao = new WarningDAOImpl();
+    
+    public WarningServiceImpl() {
+    	
+    }
 	
-	// roomId 기준 경고 조회
     @Override
     public List<WarningDTO> viewWarning(int roomId, int userId, String sensor, String warningType, String message) {
-        List<WarningDTO> list = new ArrayList<>();
-        String sql = "SELECT * FROM warning WHERE room_id = ?";
-        
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
+        WarningDTO warning = new WarningDTO(
+            roomId,       // 방 아이디
+            userId,       // 사용자 아이디
+            sensor,       // 센서 이름
+            warningType,  // 경고 타입
+            message,      // 경고 메시지
+            null,         // date 자동 입력
+            null          // phoneNumber
+        );
 
-        try {
-            con = DBUtil.getConnect();
-            pstmt = con.prepareStatement(sql);
-            pstmt.setInt(1, roomId);
-            rs = pstmt.executeQuery();
-
-//            while (rs.next()) {
-//                WarningDTO dto = new WarningDTO(
-//                    rs.getInt("warning_id"),
-//                    rs.getInt("room_id"),
-//                    rs.getString("sensor"),
-//                    rs.getString("warning_type"),
-//                    rs.getString("message"),
-//                    rs.getTimestamp("date")
-//                );
-//                list.add(dto);
-//            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DBUtil.close(rs, pstmt, con);
-        }
-
-        return list;
+        return dao.getAllWarning(warning);
     }
-
-    // 경고 조회 (roomId 기준 sql은 직접짜는 형식)
-//    @Override
-//    public List<WarningDTO> viewWarning(int roomId, int userId, String sensor, String warningType, String message) {
-//        List<WarningDTO> list = new ArrayList<>();
-//        String sql = "SELECT * FROM warning WHERE room_id = ?";
-//
-//        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-//            pstmt.setInt(1, roomId);
-//            ResultSet rs = pstmt.executeQuery();
-//
-//            while (rs.next()) {
-//                WarningDTO dto = new WarningDTO(
-//                    rs.getInt("warning_id"),
-//                    rs.getInt("room_id"),
-//                    rs.getString("sensor"),
-//                    rs.getString("warning_type"),
-//                    rs.getString("message"),
-//                    rs.getTimestamp("date")
-//                );
-//                list.add(dto);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return list;
-//    }
-
     
     
 //    // MQTT로부터 SQL문을 직접 받아 실행하는 방식

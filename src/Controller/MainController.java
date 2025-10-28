@@ -13,6 +13,8 @@ import dto.UserSessionDTO;
 import dto.WarningDTO;
 import mqtt.MqttManager;
 import service.AdminService;
+
+import service.MqttPubSubService;
 import service.MqttPubSubServiceImpl;
 import service.NoticeService;
 import service.NoticeServiceImpl;
@@ -40,6 +42,10 @@ public class MainController {
 	private final UserService service = new UserServiceImpl();
 	private AdminService adminService;
 	private MqttManager mqttManager;
+	
+	
+	//MQTT서브 퍼브
+	private MqttPubSubService mqttpubsub= new MqttPubSubServiceImpl();
 
 	// 기본 생성자
 	public MainController() {
@@ -298,11 +304,27 @@ public class MainController {
 
 		String choice = detailView.stateUpdate(user);
 		String newState = null;
+		
+		//라즈베리로 보내고자하는 유저의 테이블 데이터들가져오기
+		String userState=user.getState();
+		int userBuilding=user.getBuilding();
+		String userRoomNum=user.getRoomNum();
+		
+		//System.err.println(userState+"/"+userBuilding+"/"+userRoomNum);
+		
+		//테스트 토픽
+		String pubTopic ="/home/";
+	
+		//셀제사용 토픽
+		//String pubTopic = "/"+userBuilding+"/"+userRoomNum+"/";
+		
 
 		if ("1".equals(choice)) {
 			newState = "외출";
+			mqttpubsub.publish(pubTopic, "security_on");
 		} else if ("2".equals(choice)) {
 			newState = "재택";
+			mqttpubsub.publish(pubTopic, "security_off");
 		} else {
 			System.out.println("잘못된 값을 입력했습니다.");
 			return;

@@ -21,20 +21,28 @@ public class MqttPubSubServiceImpl implements MqttPubSubService, MqttCallback {
 	
 	//로그인된 유저정보 담을 UserDTO 이렇게만 선언해도 로그인유저의 정보가 담아지나?
     private UserDTO userDTO;
-    
-    
-    private String id;
-    private int roomId;
 	
     private MqttClient client;
-    private final String broker = "tcp://192.168.14.168:1883"; // 라즈베리파이 MQTT 브로커
+    private final String broker = "tcp://192.168.14.39:1883"; // 라즈베리파이 MQTT 브로커
+    
+    
     private final String subTopic = "/home/#"; // 전체 구독
-    private final String pubTopic = "/home/#"; // 전체 구독
+    //private final String pubTopic = "/home/#"; // 전체 구독
+
+	private int roomId;
+
+	private String id;
     
     //로그인된 아이디로 mqtt접속
     public MqttPubSubServiceImpl() {
-        this.id = userDTO.getUserId();
-        this.roomId = userDTO.getRoomId();
+        //this.id = userDTO.getUserId();
+    	
+    	try {
+    		this.roomId = userDTO.getRoomId();
+    	}catch (NullPointerException e) {
+			System.out.println(e);
+		}
+        
 
         try {
             // 고유한 클라이언트 ID 생성
@@ -123,7 +131,7 @@ public class MqttPubSubServiceImpl implements MqttPubSubService, MqttCallback {
                     warningService.saveWarning(roomId, topic, payload);
                     break;
                 default:
-                    System.out.println("처리되지 않은 토픽과 메시지: " + topic + payload);
+                    //System.out.println("처리되지 않은 토픽과 메시지: " + topic + payload);
             }
  
             // 메시지가 오면 팝업창 표시
@@ -198,9 +206,11 @@ public class MqttPubSubServiceImpl implements MqttPubSubService, MqttCallback {
     @Override
     public void publish(String topic, String message) {
         try {
+        	
             MqttMessage mqttMessage = new MqttMessage(message.getBytes());
             mqttMessage.setQos(0);
             client.publish(topic, mqttMessage);
+            
             System.out.println("📤 Published to [" + topic + "]: " + message);
         } catch (MqttException e) {
             e.printStackTrace();
