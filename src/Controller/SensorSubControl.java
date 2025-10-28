@@ -3,6 +3,8 @@ package Controller;
 import dto.UserDTO;
 import service.MqttPubSubService;
 import service.MqttPubSubServiceImpl;
+import service.WarningService;
+import service.WarningServiceImpl;
 
 public class SensorSubControl {
 
@@ -44,7 +46,40 @@ public class SensorSubControl {
     }
 
     // ✅ 아이디 없이 전체 구독 (항상 대기)
-    public static void subscribe() {
+    public void subscribe() {
+        if (running) {
+            System.out.println("⚠️ MQTT 구독이 이미 실행 중입니다.");
+            return;
+        }
+
+        running = true;
+
+        mqttThread = new Thread(() -> {
+            System.out.println("🚀 MQTT Subscribe Thread started (default user).");
+
+            UserDTO user = new UserDTO();
+            user.setUserId("default_user");
+
+            MqttPubSubService pubsub = new MqttPubSubServiceImpl(user);
+            
+
+            try {
+                while (running) {
+                    Thread.sleep(1000);
+                }
+            } catch (InterruptedException e) {
+                System.out.println("🧵 MQTT Subscribe Thread interrupted.");
+            } finally {
+                pubsub.close();
+                System.out.println("🛑 MQTT Subscribe Thread stopped.");
+            }
+        });
+
+        mqttThread.start();
+    }
+    
+    // ✅ 아이디 없이 전체 구독 (항상 대기)
+    public static void staticSubscribe() {
         if (running) {
             System.out.println("⚠️ MQTT 구독이 이미 실행 중입니다.");
             return;
@@ -76,7 +111,22 @@ public class SensorSubControl {
     }
 
     // ✅ MQTT 구독 종료
-    public static void stopSubscription() {
+    public void stopSubscription() {
+        if (!running) {
+            System.out.println("⚠️ 현재 실행 중인 구독이 없습니다.");
+            return;
+        }
+
+        System.out.println("🧩 MQTT 구독 중단 요청...");
+        running = false;
+
+        if (mqttThread != null) {
+            mqttThread.interrupt();
+        }
+    }
+    
+    // ✅ MQTT 구독 종료
+    public static void staticStopSubscription() {
         if (!running) {
             System.out.println("⚠️ 현재 실행 중인 구독이 없습니다.");
             return;

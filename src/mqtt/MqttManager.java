@@ -33,7 +33,7 @@ public class MqttManager implements MqttCallback {
 
 	private SensorService sensorService = new SensorServiceImpl();
 
-	private WarningService warningService = new WarningServiceImpl(logindUser);
+	private WarningService warningService = new WarningServiceImpl();
 
 	String clientId;
 
