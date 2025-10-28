@@ -44,6 +44,9 @@ public class AdminView {
 
 		for (WarningDTO notice : warningList) {
 		    System.out.printf("%-5d | %-10s | %-8s | %-8s | %-20s | %-20s\n",
+		    		
+		    //System.out.printf("%-6s | %-8s | %-8s | %-12s | %-10s | %-20s%n",
+		    		
 		            notice.getRoom_id(),
 		            "[" + notice.getUser_id() + "]",
 		            notice.getSensor(),

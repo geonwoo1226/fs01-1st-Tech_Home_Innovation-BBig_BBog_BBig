@@ -1,5 +1,6 @@
 package dto;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 // warning_id(auto)    room_id      sensor     warning_type   message  date(auto)
 
@@ -56,6 +57,11 @@ public class WarningDTO {
 
 
 
+
+
+	public WarningDTO(int int1, String string, String string2, String string3, String string4, Date date2) {
+		// TODO Auto-generated constructor stub
+	}
 
 
 	public String getUser_id() {
