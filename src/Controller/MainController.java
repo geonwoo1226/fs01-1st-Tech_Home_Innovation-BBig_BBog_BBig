@@ -182,21 +182,17 @@ public class MainController {
 				noticeBoard();
 				break;
 			case "3":
-				handleStateUpdate();
-				view.showMessage("외출 상태 변환 메뉴입니다");
-				break;
-			case "4":
 				handleListWarning();
 				view.showMessage("경고 수신함");
 				break;
-			case "5":
+			case "4":
 				view.showMessage("로그아웃");
 				currentUser = null;
-
+				JOptionPane.showMessageDialog(null, "로그아웃 됐습니다.");
 				// 5️ 연결 종료
 				run();
 				mqttManager.close();
-				JOptionPane.showMessageDialog(null, "로그아웃 됐습니다.");
+
 
 				break;
 			}
@@ -290,7 +286,7 @@ public class MainController {
 			noticeBoard();
 			break;
 		case 4:
-			handleMainMenu();
+			adminMainMenu();
 			break;
 		}
 

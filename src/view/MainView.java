@@ -114,9 +114,8 @@ public class MainView {
 		System.out.printf("%s님, 환영합니다!         현재 상태: %s 중입니다. \n", userDTO.getUserId(), userDTO.getState());
 		System.out.println("  [1] 사용자 정보 조회 📊");
 		System.out.println("  [2] 아파트 게시판");
-		System.out.println("  [3] 외출 상태 변환");
-		System.out.println("  [4] 경고 수신함");
-		System.out.println("  [5] 로그아웃");
+		System.out.println("  [3] 경고 수신함");
+		System.out.println("  [4] 로그아웃");
 		System.out.println("\n--------------------------------------------------");
 		System.out.print("> 입력: ");
 		return scanner.nextLine();

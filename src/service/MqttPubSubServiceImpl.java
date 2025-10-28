@@ -14,7 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import dto.UserDTO;
 
-public class MqttPubSubServiceImpl implements MqttCallback {
+public class MqttPubSubServiceImpl implements MqttPubSubService, MqttCallback {
 
     private MqttClient client;
     private final String broker = "tcp://192.168.14.168:1883"; // 라즈베리파이 MQTT 브로커
@@ -91,4 +91,16 @@ public class MqttPubSubServiceImpl implements MqttCallback {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMessageListener(MessageListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
 }
