@@ -7,6 +7,7 @@ import dto.UserDTO;
 
 public interface NoticeService {
 	List<NoticeDTO> getAllPosts();
-	NoticeDTO getPostById(int id);
 	int writePost(UserDTO user, NoticeDTO notice);
+	List<NoticeDTO> getPostById(String id);
+	List<NoticeDTO> getAllPostsAdmin();
 }

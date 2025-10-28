@@ -10,44 +10,49 @@ import dto.LoginUserDTO;
 import dto.NoticeDTO;
 import dto.UserDTO;
 import dto.UserSessionDTO;
+import dto.WarningDTO;
 import mqtt.MqttManager;
 import service.AdminService;
+import service.MqttPubSubServiceImpl;
 import service.NoticeService;
 import service.NoticeServiceImpl;
 import service.SensorService;
 import service.SensorServiceImpl;
 import service.UserService;
 import service.UserServiceImpl;
+import service.WarningService;
+import service.WarningServiceImpl;
 import util.ConsoleUtils;
 import view.AdminView;
 import view.DetailView;
 import view.MainView;
 
 public class MainController {
-    // 현재 로그인한 사용자 정보
-    private UserSessionDTO currentUser = null;
-    // 메인 화면
-    private final MainView view = new MainView();
-    // 공지 관련
-    private NoticeService noticeService;
-    private DetailView detailView;
-    // 관리자 화면
-    private final AdminView adminView = new AdminView();
-    private final UserService service = new UserServiceImpl();
-    private AdminService adminService;
-    private MqttManager mqttManager;
+	// 현재 로그인한 사용자 정보
+	private UserSessionDTO currentUser = null;
+	// 메인 화면
+	private final MainView view = new MainView();
+	// 공지 관련
+	private NoticeService noticeService;
+	private DetailView detailView;
+	// 관리자 화면
+	private final AdminView adminView = new AdminView();
+	private final UserService service = new UserServiceImpl();
+	private AdminService adminService;
+	private MqttManager mqttManager;
 
-    // 기본 생성자
-    public MainController() {
-        this.noticeService = new NoticeServiceImpl();        // ① 먼저 서비스 생성
-        this.detailView = new DetailView(this.noticeService); // ② 그 서비스로 뷰 연결
-    }
+	// 기본 생성자
+	public MainController() {
+		this.noticeService = new NoticeServiceImpl(); // ① 먼저 서비스 생성
+		this.detailView = new DetailView(this.noticeService); // ② 그 서비스로 뷰 연결
+	}
 
-    // 다른 생성자 (필요하다면 유지)
-    public MainController(AdminService adminService) {
-        this(); // 기본 생성자 호출해서 위 두 개 먼저 초기화
-        this.adminService = adminService;
-    }
+	// 다른 생성자 (필요하다면 유지)
+	public MainController(AdminService adminService) {
+		this(); // 기본 생성자 호출해서 위 두 개 먼저 초기화
+		this.adminService = adminService;
+	}
+	
 
 	public void run() {
 		while (true) {
@@ -94,6 +99,7 @@ public class MainController {
 		// View에 현재 사용자 이름을 넘겨주어 메뉴를 보여줌
 		UserDTO user = view.showRegistrationForm();
 		int result = service.register(user);
+		
 
 		new Thread(() -> {
 			if (result == 1) {
@@ -123,22 +129,11 @@ public class MainController {
 
 			currentUser = new UserSessionDTO(loginSuccessUser);
 			System.out.println("\n MQTT 서비스에 연결을 시작합니다.");
-			// mqttManager = new MqttManager(currentUser.getLoginUser().getUserId());
-			
-			
-			// 1️ UserDTO 생성
-	        UserDTO user = new UserDTO();
-	        user.setUserId("user123"); // 예시 ID
 
-	        // 2️ MqttManager 생성 (구독 시작)
-	        MqttManager mqttManager = new MqttManager(user);
 
-	        // 3️ 발행 테스트
-	        String publishTopic = "/home/pc/livingroom/light";
-	        String message = "Light ON";
+			 // 로그인 후 MQTT 구독 스레드 시작
+	        startMqttSubscriber(loginSuccessUser);
 
-	        mqttManager.publish(publishTopic, message);
-			
 			// 만약 로그인한 user_id가 admin일 경우
 			if ("admin".equals(loginSuccessUser.getUserId())) {
 				JOptionPane.showMessageDialog(null, "관리자로 로그인했습니다.");
@@ -147,12 +142,32 @@ public class MainController {
 				JOptionPane.showMessageDialog(null, "로그인에 성공했습니다.");
 				handleMainMenu();
 			}
+//	        asub.subscribe();
 		} else {
 			JOptionPane.showMessageDialog(null, "로그인 실패");
 			login();
 		}
 
 	}
+
+	// 로그인 후 MQTT 구독 스레드 시작
+    private void startMqttSubscriber(UserDTO user) {
+        new Thread(() -> {
+            try {
+                // 🔹 MQTT 서비스 생성: 로그인 사용자 기준 구독
+                MqttPubSubServiceImpl pubsub = new MqttPubSubServiceImpl(user);
+
+                // 🔹 메시지는 콜백에서 팝업 처리
+                // 실제 pubsub 클래스에서 messageArrived()가 자동 호출됨
+                // 스레드는 종료되지 않도록 유지
+                while (true) {
+                    Thread.sleep(1000);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
 
 	// 관리자 메뉴
 	private void adminMainMenu() {
@@ -163,35 +178,37 @@ public class MainController {
 			case "1": // 빌딩 사용자 정보 조회
 				handleListResidents();
 				break;
-			case "2": // 유저 정보 조회
-				showInfo();
+			case "2": // 아파트 소통 게시판
+				noticeBoard();
 				break;
 			case "3":
-				userInfoUpdate();
-				view.showMessage("사용자 정보 수정 메뉴입니다.");
+				handleListWarning();
+				view.showMessage("경고 수신함");
 				break;
-			case "5":
-				// noticeBoard();
-				view.showMessage("아파트 게시판입니다.");
-				break;
-			case "6":
-				handleStateUpdate();
-				view.showMessage("외출 상태 변환 메뉴입니다");
-				break;
-			case "7":
+			case "4":
 				view.showMessage("로그아웃");
 				currentUser = null;
-
-		        // 5️ 연결 종료
-		        mqttManager.close();
 				JOptionPane.showMessageDialog(null, "로그아웃 됐습니다.");
+				// 5️ 연결 종료
 				run();
+				mqttManager.close();
+
+
 				break;
 			}
 		}
 	}
 
-	// 관리자가 입주민 정보를 확인
+	private void handleListWarning() {
+		ConsoleUtils.clearConsole();
+		
+		WarningService warningService = new WarningServiceImpl();
+		List<WarningDTO> warningList = warningService.viewWarning(0, 0, null, null, null);
+		
+		adminView.viewWarning(warningList);
+	}
+
+	// 관리자 1번 - 관리자가 입주민 정보를 확인
 	private void handleListResidents() {
 		ConsoleUtils.clearConsole();
 
@@ -199,8 +216,6 @@ public class MainController {
 
 		adminView.showResidentList(residents);
 	}
-	
-	
 
 	// 로그인 성공 시 실행
 	private void handleMainMenu() {
@@ -220,19 +235,16 @@ public class MainController {
 			view.showMessage("사용자 정보 수정 메뉴입니다.");
 			break;
 		case "4":
-			// martUse();
-			view.showMessage("단지 마트 메뉴입니다.");
-			break;
-		case "5":
 			noticeBoard();
 			view.showMessage("아파트 게시판입니다.");
 
 			break;
-		case "6":
+		case "5":
 			handleStateUpdate();
 			view.showMessage("외출 상태 변환 메뉴입니다");
+
 			break;
-		case "7":
+		case "6":
 			view.showMessage("로그아웃");
 			currentUser = null;
 			JOptionPane.showMessageDialog(null, "로그아웃 됐습니다.");
@@ -249,31 +261,36 @@ public class MainController {
 
 		NoticeService noticeService = new NoticeServiceImpl();
 		List<NoticeDTO> noticeList = noticeService.getAllPosts();
-		
+		List<NoticeDTO> postMyList = noticeService.getPostById(user.getUserId());
+		List<NoticeDTO> noticeAdmin = noticeService.getAllPostsAdmin();
+
 		int choice = detailView.noticeMenu(user);
-		
-		switch(choice) {
+
+		switch (choice) {
 		case 1:
-			detailView.writePost(user);   // 게시글 작성
+			detailView.writePost(user); // 게시글 작성
 			JOptionPane.showMessageDialog(null, "게시글이 작성됐습니다.");
 			noticeBoard();
 			break;
 		case 2:
-			detailView.viewPost(noticeList);    // 게시글 조회
-			noticeBoard();
-			break;
+			if ("admin".equals(user.getUserId())) {
+				adminView.viewPostAdmin(noticeAdmin);
+				break;
+			} else {
+				detailView.viewPost(noticeList); // 게시글 조회
+				noticeBoard();
+				break;
+			}
 		case 3:
-	//		detailView.viewPostDetail(user);    // 자신이 작성한 게시글 조회
+			detailView.getPostById(postMyList, user); // 자신이 작성한 게시글 조회
 			noticeBoard();
 			break;
 		case 4:
-			handleMainMenu();
+			adminMainMenu();
 			break;
 		}
-		
+
 	}
-
-
 
 	private void handleStateUpdate() {
 		UserDAO dao = new UserDAOImpl();
@@ -298,6 +315,7 @@ public class MainController {
 		user.setState(newState);
 
 		System.out.println("현재 상태: " + user.getState());
+		JOptionPane.showMessageDialog(null, "변경 됐습니다.");
 	}
 
 	private void userInfoUpdate() {
@@ -348,7 +366,7 @@ public class MainController {
 
 				System.out.println("test");
 				// 센서 컨트롤 (유저 동/호수, 제어 센서, on/off)
-				SensorControl sensor = new SensorControl();
+				SensorControl sensor = new SensorControl(user);
 
 				// 센서 종류 선택
 				sensor.control(user.getBuilding(), user.getRoomNum(), selectedSensor, action, selecteRoom);

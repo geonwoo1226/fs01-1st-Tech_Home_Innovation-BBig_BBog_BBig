@@ -13,9 +13,9 @@ import service.NoticeService;
 public class DetailView {
 	private static final Scanner scanner = new Scanner(System.in);
 	private NoticeService noticeService;
-	
+
 	public DetailView() {
-		
+
 	}
 
 	public DetailView(NoticeService noticeService) {
@@ -128,8 +128,6 @@ public class DetailView {
 		// 팝업으로 출력
 		JOptionPane.showMessageDialog(null, message, "내 정보", JOptionPane.INFORMATION_MESSAGE);
 	}
-	
-
 
 	// 3번 사용자 정보 수정
 	public UserDTO userInfoUpdate(UserDTO user) {
@@ -168,23 +166,29 @@ public class DetailView {
 				}
 				user.setPass(newPass);
 				return user;
-				
+
 			}
-			
+
 			return null;
 		}
-		
+
 	}
-	
-	
+
 	// 5번 아파트 게시판
 	public int noticeMenu(UserDTO user) {
+		
 		System.out.println("\n==================================================");
 		System.out.println("      아파트 자유 게시판입니다.");
 		System.out.println("==================================================");
-		System.out.println("  [1] 게시글 작성");
-		System.out.println("  [2] 게시글 목록 보기");
-		System.out.println("  [3] 작성한 게시글 보기");
+		if ("admin".equals(user.getUserId())) {
+			System.out.println("  [1] 공지사항 작성");
+			System.out.println("  [2] 게시글 목록 보기");
+			System.out.println("  [3] 작성한 공지사항 보기");
+		} else {
+			System.out.println("  [1] 게시글 작성");
+			System.out.println("  [2] 게시글 목록 보기");
+			System.out.println("  [3] 작성한 게시글 보기");
+		}
 		System.out.println("  [4] 메뉴로 돌아가기");
 
 		System.out.println("\n--------------------------------------------------");
@@ -192,27 +196,38 @@ public class DetailView {
 
 		return scanner.nextInt();
 	}
-	
-	
+
 	public int writePost(UserDTO user) {
-		if(scanner.hasNextLine()) {
-		    scanner.nextLine(); 
+		if (scanner.hasNextLine()) {
+			scanner.nextLine();
 		}
-		
+
 		System.out.println("\n==================================================");
 		System.out.println("      게시글을 작성합니다");
 		System.out.println("==================================================");
-		System.out.println("  [민원/소통] 카테고리를 선택해주세요. ");
-		System.out.println("  [1] 민원");
-		System.out.println("  [2] 소통");
+		System.out.println("  카테고리를 선택해주세요. ");
+
+		if ("admin".equals(user.getUserId())) {
+			System.out.println("  [3] 공지");
+		} else {
+			System.out.println("  [1] 민원");
+			System.out.println("  [2] 소통");
+		}
 		System.out.print("> 입력: ");
 		String type = scanner.nextLine();
-		
-		switch(type) {
-		case "1": type = "민원"; break;
-		case "2": type = "소통"; break;
+
+		switch (type) {
+		case "1":
+			type = "민원";
+			break;
+		case "2":
+			type = "소통";
+			break;
+		case "3":
+			type = "공지";
+			break;
 		}
-		
+
 		System.out.print("  [제목]: ");
 		String title = scanner.nextLine();
 		System.out.print("  [내용]: ");
@@ -220,64 +235,69 @@ public class DetailView {
 
 		System.out.println("\n--------------------------------------------------");
 
-	    // NoticeDTO 객체 생성
-	    NoticeDTO notice = new NoticeDTO();
-	    notice.setType(type);
-	    notice.setTitle(title);
-	    notice.setPost(post);
-	    
+		// NoticeDTO 객체 생성
+		NoticeDTO notice = new NoticeDTO();
+		notice.setType(type);
+		notice.setTitle(title);
+		notice.setPost(post);
+
 		return noticeService.writePost(user, notice);
 	}
 
 	public void viewPost(List<NoticeDTO> noticeList) {
-		scanner.nextLine(); 
+		scanner.nextLine();
 		System.out.println("\n==================================================");
 		System.out.println("      아파트 소통 게시판");
 		System.out.println("==================================================");
 		System.out.println("번호\t | 카테고리 | 제목 \t \t| 내용 \t \t| 작성날짜 \t |");
 		System.out.println("-------------------------------------------------------------------------------");
 		int size = noticeList.size();
-		
-		for(int i=0; i < size; i++) {
-			NoticeDTO notice = noticeList.get(i);
-			System.out.print(notice.getNoticeId()+ "\t | ");
-			System.out.print("["+notice.getTitle()+"]"+ "\t | ");
-			System.out.print(notice.getType()+ "\t | ");
 
-			System.out.print(notice.getPost()+ "\t | ");
-			System.out.print(notice.getPostDate()+ "\t | ");
+		for (int i = 0; i < size; i++) {
+			NoticeDTO notice = noticeList.get(i);
+			System.out.print(notice.getNoticeId() + "\t | ");
+			System.out.print("[" + notice.getTitle() + "]" + "\t | ");
+			System.out.print(notice.getType() + "\t | ");
+
+			System.out.print(notice.getPost() + "\t | ");
+			System.out.print(notice.getPostDate() + "\t | ");
 			System.out.println("\n------------------------------------------------------------------------");
 		}
 		System.out.println("==============================================================================");
 		System.out.print("게시판 나가기 >>>>");
 		scanner.nextLine();
-		
+
 	}
 	
-//	public void viewPostDetail(UserDTO user) {
-//		scanner.nextLine(); 
-//		System.out.println("\n==================================================");
-//		System.out.println("      아파트 소통 게시판");
-//		System.out.println("==================================================");
-//		System.out.println("번호\t | 카테고리 | 제목 \t \t| 내용 \t \t| 작성날짜 \t |");
-//		System.out.println("-------------------------------------------------------------------------------");
-//		int size = noticeList.size();
-//		
-//		for(int i=0; i < size; i++) {
-//			NoticeDTO notice = noticeList.get(i);
-//			System.out.print(notice.getNoticeId()+ "\t | ");
-//			System.out.print("["+notice.getTitle()+"]"+ "\t | ");
-//			System.out.print(notice.getType()+ "\t | ");
-//
-//			System.out.print(notice.getPost()+ "\t | ");
-//			System.out.print(notice.getPostDate()+ "\t | ");
-//			System.out.println("\n------------------------------------------------------------------------");
-//		}
-//		System.out.println("==============================================================================");
-//		System.out.print("게시판 나가기 >>>>");
-//		scanner.nextLine();
-//		
-//	}
+
+	public void getPostById(List<NoticeDTO> postMyList, UserDTO user) {
+		scanner.nextLine();
+		System.out.println("\n==================================================");
+		System.out.printf("    %s님이 작성한 글 목록 \n", user.getUserId());
+		System.out.println("==================================================");
+		System.out.println("번호\t | 카테고리 | 제목 \t \t| 내용 \t \t| 작성날짜 \t |");
+		System.out.println("-------------------------------------------------------------------------------");
+		int size = postMyList.size();
+
+		if (size > 0) {
+			for (int i = 0; i < size; i++) {
+				NoticeDTO post = postMyList.get(i);
+				System.out.print(post.getNoticeId() + "\t | ");
+				System.out.print("[" + post.getType() + "]" + "\t | ");
+				System.out.print(post.getTitle() + "\t | ");
+
+				System.out.print(post.getPost() + "\t | ");
+				System.out.print(post.getPostDate() + "\t | ");
+				System.out.println("\n------------------------------------------------------------------------");
+			}
+		} else {
+			System.out.println("           작성된 게시글이 없습니다");
+		}
+		System.out.println("==============================================================================");
+		System.out.print("게시판 나가기 >>>>");
+		scanner.nextLine();
+
+	}
 
 	// 6번 상태 변환 시스템
 	public String stateUpdate(UserDTO user) {
@@ -295,8 +315,5 @@ public class DetailView {
 
 		return scanner.next();
 	}
-
-
-
 
 }
