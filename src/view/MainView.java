@@ -97,10 +97,9 @@ public class MainView {
 		System.out.println("  [1] 센서 관리 💡");
 		System.out.println("  [2] 정보 조회 📊");
 		System.out.println("  [3] 사용자 정보 수정 ⚙️");
-		System.out.println("  [4] 단지 마트");
-		System.out.println("  [5] 아파트 게시판");
-		System.out.println("  [6] 외출 상태 변환");
-		System.out.println("  [7] 로그아웃");
+		System.out.println("  [4] 아파트 게시판");
+		System.out.println("  [5] 외출 상태 변환");
+		System.out.println("  [6] 로그아웃");
 		System.out.println("\n--------------------------------------------------");
 		System.out.print("> 입력: ");
 		return scanner.nextLine();
@@ -114,9 +113,10 @@ public class MainView {
 		System.out.println("==================================================");
 		System.out.printf("%s님, 환영합니다!         현재 상태: %s 중입니다. \n", userDTO.getUserId(), userDTO.getState());
 		System.out.println("  [1] 사용자 정보 조회 📊");
-		System.out.println("  [5] 아파트 게시판");
-		System.out.println("  [6] 외출 상태 변환");
-		System.out.println("  [7] 로그아웃");
+		System.out.println("  [2] 아파트 게시판");
+		System.out.println("  [3] 외출 상태 변환");
+		System.out.println("  [4] 경고 수신함");
+		System.out.println("  [5] 로그아웃");
 		System.out.println("\n--------------------------------------------------");
 		System.out.print("> 입력: ");
 		return scanner.nextLine();

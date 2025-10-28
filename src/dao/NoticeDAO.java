@@ -15,7 +15,8 @@ public interface NoticeDAO {
 	// 게시글 상세 조회
 	List<NoticeDTO> getPostById(String id);
 
-
+	// (관리자) 게시글 목록 조회
+	List<NoticeDTO> getAllPostsAdmin();
 
 
 	

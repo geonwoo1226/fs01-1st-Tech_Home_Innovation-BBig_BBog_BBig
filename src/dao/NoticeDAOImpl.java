@@ -47,7 +47,7 @@ public class NoticeDAOImpl implements NoticeDAO {
 	// 유저 로그인 ->> 카테고리가 민원인 것을 제외한 모든 게시글 목록 조회
 	@Override
 	public List<NoticeDTO> getAllPosts() {
-		String sql = "select * from notice where type <> '민원' ";
+		String sql = "select * from notice where type <> '민원' order by post_date";
 		Connection con = null;
 		PreparedStatement ptmt = null;
 		ResultSet rs = null;
@@ -75,7 +75,7 @@ public class NoticeDAOImpl implements NoticeDAO {
 
 	@Override
 	public List<NoticeDTO> getPostById(String id) {
-		String sql = "select * from notice where user_id = ?";
+		String sql = "select * from notice where user_id = ? order by post_date";
 		Connection con = null;
 		PreparedStatement ptmt = null;
 		ResultSet rs = null;
@@ -86,6 +86,10 @@ public class NoticeDAOImpl implements NoticeDAO {
 		try {
 			con = DBUtil.getConnect();
 			ptmt = con.prepareStatement(sql);
+			
+			
+			ptmt.setString(1, id);
+			
 			rs = ptmt.executeQuery();
 			
 			while(rs.next()) {
@@ -95,8 +99,9 @@ public class NoticeDAOImpl implements NoticeDAO {
 										rs.getString(4),
 										rs.getString(5),
 										rs.getString(6));
-				}
 				myPostlist.add(noticeMy);
+				}
+				
 			}catch(SQLException e) {
 				e.printStackTrace();
 			}finally {
@@ -105,6 +110,34 @@ public class NoticeDAOImpl implements NoticeDAO {
 		
 		
 		return myPostlist;
+	}
+
+	@Override
+	public List<NoticeDTO> getAllPostsAdmin() {
+		String sql = "select * from notice order by post_date";
+		Connection con = null;
+		PreparedStatement ptmt = null;
+		ResultSet rs = null;
+		
+		NoticeDTO notice = null;
+		
+		List<NoticeDTO> boardlist = new ArrayList<NoticeDTO>();
+		try {
+			con = DBUtil.getConnect();
+			ptmt = con.prepareStatement(sql);
+			rs = ptmt.executeQuery();
+			
+			while(rs.next()) {
+				notice = new NoticeDTO(rs.getInt(1), rs.getString(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getString(6));
+				boardlist.add(notice);
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}finally {
+			DBUtil.close(rs, ptmt, con);
+		}
+		
+		return boardlist;
 	}
 
 }
