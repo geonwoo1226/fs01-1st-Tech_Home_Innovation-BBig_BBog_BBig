@@ -45,19 +45,6 @@ public class WarningServiceImpl implements WarningService {
     }
     
     
-//    // MQTT로부터 SQL문을 직접 받아 실행하는 방식
-//    @Override
-//    public void saveWarning(String topic, String payload) {
-//        System.out.println("📥 수신된 SQL: " + payload);
-//        try (Statement stmt = conn.createStatement()) {
-//            int result = stmt.executeUpdate(payload);
-//            System.out.println("✅ SQL 실행 완료 (" + result + " rows affected)");
-//        } catch (SQLException e) {
-//            System.err.println("❌ SQL 실행 오류: " + e.getMessage());
-//        }
-//    }
-    
-    
     //1차로 데이터베이스 저장함수
     @Override
     public void saveWarning(String topic, String payload) {
@@ -206,30 +193,6 @@ public class WarningServiceImpl implements WarningService {
 		// TODO Auto-generated method stub
 		
 	}
-	
-
-    // SQL 기반 저장 (payload가 SQL문)
-//    @Override
-//    public void saveWarning(String topic, String payload) {
-//        System.out.println("📩 수신 토픽: " + topic);
-//        System.out.println("📥 수신된 SQL 쿼리: " + payload);
-//
-//        Connection con = null;
-//        Statement stmt = null;
-//
-//        try {
-//            con = DBUtil.getConnect();
-//            stmt = con.createStatement();
-//
-//            int result = stmt.executeUpdate(payload);
-//            System.out.println("✅ SQL 실행 성공 (" + result + "행 처리됨)");
-//
-//        } catch (SQLException e) {
-//            System.err.println("❌ SQL 실행 실패: " + e.getMessage());
-//        } finally {
-//            DBUtil.close(null, stmt, con);
-//        }
-//    }
 	
 	
 }

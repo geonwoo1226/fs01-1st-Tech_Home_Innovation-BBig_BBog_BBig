@@ -20,16 +20,16 @@ public class SensorServiceImpl implements SensorService {
 	    
 		while(true) {
 			switch(roomChoice) {
-			case "방1":
-				sensors = Arrays.asList("LED", "커튼");
+			case "room1":
+				sensors = Arrays.asList("LED", "window");
 				break;
-			case "방2":
-				sensors = Arrays.asList("LED", "커튼");
+			case "room2":
+				sensors = Arrays.asList("LED", "window");
 				break;
-			case "거실":
-				sensors = Arrays.asList("LED", "화분센서");
+			case "living":
+				sensors = Arrays.asList("LED", "pump");
 				break;
-			case "부엌":
+			case "kitchen":
 				sensors = Arrays.asList("LED");
 				break;
 			}

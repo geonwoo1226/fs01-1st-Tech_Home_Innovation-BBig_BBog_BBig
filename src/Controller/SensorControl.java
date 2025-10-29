@@ -26,6 +26,7 @@ public class SensorControl {
         mqttManager.publish("home/" + address, message);
 
         // lcd 메시지
+        System.out.println("home/lcd"+"message: "+ message + "/기능을 수행합니다.");
         mqttManager.publish("home/lcd", message + "/기능을 수행합니다.");
 
         System.out.println("끝");

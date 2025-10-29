@@ -101,7 +101,6 @@ public class MainController {
 	private void register() {
 		// 콘솔창 클리어
 		ConsoleUtils.clearConsole();
-
 		// View에 현재 사용자 이름을 넘겨주어 메뉴를 보여줌
 		UserDTO user = view.showRegistrationForm();
 		int result = service.register(user);
@@ -109,11 +108,11 @@ public class MainController {
 
 		new Thread(() -> {
 			if (result == 1) {
-				JOptionPane.showMessageDialog(null, "회원가입이 성공했습니다.");
+			    JOptionPane.showMessageDialog(null, "회원가입이 성공했습니다.");
 			} else if (result == 0) {
-				JOptionPane.showMessageDialog(null, "회원가입이 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+			    JOptionPane.showMessageDialog(null, "회원가입이 실패했습니다.", "오류", JOptionPane.ERROR_MESSAGE);
 			} else if (result == -1) {
-				JOptionPane.showMessageDialog(null, "존재하지 않는 동/호실 입니다.");
+			    JOptionPane.showMessageDialog(null, "존재하지 않는 동/호실 입니다.");
 			}
 		}).start(); // 스레드 시작
 	}
@@ -292,7 +291,11 @@ public class MainController {
 			noticeBoard();
 			break;
 		case 4:
-			adminMainMenu();
+			if("admin".equals(user.getUserId())) {
+				adminMainMenu();
+				break;
+			}
+			handleMainMenu();
 			break;
 		}
 
@@ -320,10 +323,10 @@ public class MainController {
 		
 
 		if ("1".equals(choice)) {
-			newState = "외출";
+			newState = "Away";
 			mqttpubsub.publish(pubTopic, "security_on");
 		} else if ("2".equals(choice)) {
-			newState = "재택";
+			newState = "Home";
 			mqttpubsub.publish(pubTopic, "security_off");
 		} else {
 			System.out.println("잘못된 값을 입력했습니다.");
