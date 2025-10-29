@@ -16,15 +16,18 @@ public class WarningDTO {
 
     public WarningDTO() {}
 
-
-	public WarningDTO(int room_id, String user_id, String sensor, String warningType, String date,
+    
+    
+	public WarningDTO(int room_id, String user_id, String sensor, String warningType, String message, String date,
 			String phoneNumber) {
 		super();
 		this.room_id = room_id;
 		this.user_id = user_id;
 		this.sensor = sensor;
 		this.warningType = warningType;
+		this.message = message;
 		this.date = date;
+
 		this.phoneNumber = phoneNumber;
 	}
 

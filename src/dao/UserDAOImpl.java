@@ -51,7 +51,7 @@ public class UserDAOImpl implements UserDAO {
 
 		// 유저가 입력한 (아파트) 동/호실이 존재하는지 체크 후 유저 추가 101 3001
 		String checkRoom = "select * from room where building = ? and room_num = ?";
-		String insertUser = "insert into user values(?, ?, ?, ?, null, ?)";
+		String insertUser = "insert into user values(?, ?, ?, ?, 'Home', ?)";
 		Connection con = null;
 		ResultSet rs = null;
 
@@ -91,18 +91,27 @@ public class UserDAOImpl implements UserDAO {
 
 			result = 1;
 
+		} catch (java.sql.SQLIntegrityConstraintViolationException e) {
+		    // 중복 PK 오류인 경우
+		    if (e.getMessage().contains("Duplicate entry")) {
+		        System.out.println("이미 존재하는 ID입니다.");
+		    } else {
+		        System.out.println("회원가입 중 오류가 발생했습니다.");
+		    }
+
+		    if (con != null) {
+		        try {
+		            con.rollback();
+		        } catch (SQLException ex) {
+		            ex.printStackTrace(); 
+		        }
+		    }
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			if (con != null) {
-				try {
-					con.rollback();
-				} catch (SQLException ex) {
-					ex.printStackTrace();
-				}
-			}
 		} finally {
-			DBUtil.close(null, ptmtCheck, con);
-			DBUtil.close(null, ptmtUser, con);
+		    DBUtil.close(null, ptmtCheck, con);
+		    DBUtil.close(null, ptmtUser, con);
 		}
 
 		return result;
